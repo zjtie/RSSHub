@@ -63,24 +63,20 @@ export const getSignedHeader = async (url: string, apiPath: string) => {
     // fisrt: get cookie(dc_0) from zhihu.com
     const dc0 = await cache.tryGet('zhihu:cookies:d_c0', async () => {
         const response1 = await ofetch.raw(url);
-        const $ = load(response1._data);
-        const zseCk = $('script:contains("__zse_ck")')
-            .text()
-            .match(/\|\|"(.*?)",.*;document\.cookie/)?.[1];
-        if (!zseCk) {
-            throw new Error('Failed to extract `__zse_ck` from page');
-        }
+        const zseCk = response1._data.match(/var e="__zse_ck",t=\(typeof __g\.ck == 'string' && __g\.ck\)\|\|"([\w+/=]*?)",_=6048e5;/)?.[1];
 
-        const response2 = await ofetch.raw(url, {
-            headers: {
-                cookie: `${response1.headers
-                    .getSetCookie()
-                    .map((s) => s.split(';')[0])
-                    .join('; ')}; __zse_ck=${zseCk}`,
-            },
-        });
+        const response2 = zseCk
+            ? await ofetch.raw(url, {
+                  headers: {
+                      cookie: `${response1.headers
+                          .getSetCookie()
+                          .map((s) => s.split(';')[0])
+                          .join('; ')}; __zse_ck=${zseCk}`,
+                  },
+              })
+            : null;
 
-        const dc0 = response2.headers
+        const dc0 = (response2 || response1).headers
             .getSetCookie()
             .find((s) => s.startsWith('d_c0='))
             ?.split(';')[0];
