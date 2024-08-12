@@ -13,7 +13,7 @@ jobs:
 
       - name: Pull latest changes
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.email "1402394430@qq.com"
+          git config --local user.name "zjtie"
           git pull origin main
           git push
