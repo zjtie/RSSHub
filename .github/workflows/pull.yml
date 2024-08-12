@@ -16,4 +16,3 @@ jobs:
           git config --local user.email "1402394430@qq.com"
           git config --local user.name "zjtie"
           git pull origin main
-          git push
