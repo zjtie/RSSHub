@@ -11,8 +11,15 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
 
+      - name: Add upstream repository
+        run: |
+          git remote add upstream https://github.com/DIYgod/RSSHub.git
+
       - name: Pull latest changes
         run: |
           git config --local user.email "1402394430@qq.com"
           git config --local user.name "zjtie"
-          git pull origin master
+          git fetch upstream
+          git pull upstream master
+          git push origin master
+        continue-on-error: true
