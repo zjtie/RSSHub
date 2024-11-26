@@ -1431,9 +1431,9 @@
     "nczitzk"
   ],
   "/cnjxol/:category?/:id?": [],
-  "/cnki/author/:name/:company": [
-    "Derekmini",
-    "harveyqiu"
+  "/cnki/author/:code": [
+    "harveyqiu",
+    "Derekmini"
   ],
   "/cnki/journals/debut/:name": [
     "Fatpandac"
@@ -1597,9 +1597,6 @@
   ],
   "/cw/today": [
     "TonyRL"
-  ],
-  "/cybersecurityventures/news/:category?": [
-    "KarasuShin"
   ],
   "/cyzone/author/:id": [
     "nczitzk"
@@ -1819,9 +1816,6 @@
   ],
   "/dockerhub/build/:owner/:image/:tag?": [
     "HenryQW"
-  ],
-  "/dockerhub/repositories/:owner": [
-    "CaoMeiYouRen"
   ],
   "/dockerhub/tag/:owner/:image/:limits?": [],
   "/docschina/weekly/:category?": [
@@ -3466,9 +3460,6 @@
   "/idolypride/news": [
     "Mingxia1"
   ],
-  "/ieee/author/:aid/:sortType": [
-    "Derekmini"
-  ],
   "/ieee/journal/:punumber/:earlyAccess?": [
     "HenryQW"
   ],
@@ -4078,8 +4069,7 @@
     "bigfei"
   ],
   "/linkresearcher/:params": [
-    "y9c",
-    "KarasuShin"
+    "y9c"
   ],
   "/linovelib/novel/:id": [
     "misakicoca"
@@ -5252,8 +5242,7 @@
     "ClarkeCheng"
   ],
   "/pixiv/novel/series/:id": [
-    "SnowAgar25",
-    "keocheung"
+    "SnowAgar25"
   ],
   "/pixiv/user/novels/:id/:full_content?": [
     "TonyRL",
@@ -6410,21 +6399,8 @@
   "/sycl/:feed?": [
     "mocusez"
   ],
-  "/syosetu/dev": [
-    "SnowAgar25"
-  ],
-  "/syosetu/:ncode": [
-    "eternasuno",
-    "SnowAgar25"
-  ],
-  "/syosetu/rankingr18/:sub/:type": [
-    "SnowAgar25"
-  ],
-  "/syosetu/ranking/:listType/:type": [
-    "SnowAgar25"
-  ],
-  "/syosetu/search/:sub/:query": [
-    "SnowAgar25"
+  "/syosetu/chapter/:id": [
+    "huangliangshusheng"
   ],
   "/sysu/cse": [],
   "/sysu/ygafz/:type?": [
