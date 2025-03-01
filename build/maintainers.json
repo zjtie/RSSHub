@@ -1032,6 +1032,9 @@
   "/bse/:category?/:keyword?": [
     "nczitzk"
   ],
+  "/bsky/profile/:handle/feed/:space/:routeParams?": [
+    "FerrisChi"
+  ],
   "/bsky/keyword/:keyword": [
     "untitaker"
   ],
@@ -1460,6 +1463,9 @@
   "/cmde/:cate{.+}?": [],
   "/cmpxchg8b/articles": [
     "yuguorui"
+  ],
+  "/cmu/andypavlo/blog": [
+    "mocusez"
   ],
   "/cn-healthcare/index": [
     "qnloft"
@@ -2291,6 +2297,9 @@
   "/fanbox/:creator": [
     "KarasuShin"
   ],
+  "/fangchan/list/:id?": [
+    "nczitzk"
+  ],
   "/fanqienovel/page/:bookId": [
     "TonyRL"
   ],
@@ -2609,12 +2618,14 @@
   "/gcores/articles": [
     "nczitzk"
   ],
-  "/gcores/category/:category": [
+  "/gcores/categories/:id/:tab?": [
     "MoguCloud",
-    "StevenRCE0"
+    "StevenRCE0",
+    "nczitzk"
   ],
-  "/gcores/collections/:collection": [
-    "kudryavka1013"
+  "/gcores/collections/:id/:tab?": [
+    "kudryavka1013",
+    "nczitzk"
   ],
   "/gcores/news": [
     "nczitzk"
@@ -2624,6 +2635,9 @@
   ],
   "/gcores/tags/:id/:tab?": [
     "StevenRCE0",
+    "nczitzk"
+  ],
+  "/gcores/videos": [
     "nczitzk"
   ],
   "/gdsrx/:id?": [],
@@ -2962,6 +2976,9 @@
     "Yoge-Code"
   ],
   "/gov/mmht/*": [],
+  "/gov/moa/gjs/:category{.+}?": [
+    "nczitzk"
+  ],
   "/gov/moa/suburl/:suburl{.+}": [
     "Origami404",
     "lyqluis"
@@ -3104,6 +3121,12 @@
   ],
   "/gov/taiyuan/rsj/:caty/:page?": [
     "2PoL"
+  ],
+  "/gov/tianjin/tjftz-notice/:channelId": [
+    "HaoyuLee"
+  ],
+  "/gov/tianjin/tjrcgzw-notice/:cate/:subCate": [
+    "HaoyuLee"
   ],
   "/gov/wuhan/sy/whyw": [
     "nczitzk"
@@ -3492,8 +3515,17 @@
   "/hrbeu/yjsy/list/:id": [
     "Derekmini"
   ],
+  "/hrbust/cs/:category?": [
+    "cscnk52"
+  ],
+  "/hrbust/gzc/:category?": [
+    "cscnk52"
+  ],
   "/hrbust/jwzx/:type?/:page?": [
     "LenaNouzen",
+    "cscnk52"
+  ],
+  "/hrbust/lib/:category?": [
     "cscnk52"
   ],
   "/hrbust/news/:category?": [
@@ -4061,6 +4093,12 @@
   "/jornada/:date?/:category?": [
     "Thealf154"
   ],
+  "/joshwcomeau/latest/:category?": [
+    "Rjnishant530"
+  ],
+  "/joshwcomeau/popular": [
+    "Rjnishant530"
+  ],
   "/jou/tzgg": [
     "real-jiakai"
   ],
@@ -4188,6 +4226,9 @@
   "/kisskiss/blog/:category?": [
     "keocheung"
   ],
+  "/komiic/comic/:id": [
+    "NekoAria"
+  ],
   "/konachan/post/popular_recent/:period?": [
     "magic-akari",
     "NekoAria"
@@ -4267,6 +4308,9 @@
   ],
   "/layoffs/": [
     "BrandNewLifeJackie26"
+  ],
+  "/leagueoflegends/patch-notes": [
+    "noahm"
   ],
   "/learnblockchain/posts/:cid/:sort?": [
     "running-grass"
@@ -4566,7 +4610,8 @@
     "nczitzk"
   ],
   "/meituan/tech": [
-    "ktKongTong"
+    "ktKongTong",
+    "cscnk52"
   ],
   "/metacritic/:type?/:sort?/:filter?": [],
   "/meteor/boards": [
@@ -6762,6 +6807,13 @@
   "/swjtu/jyzpxx": [
     "qizidog"
   ],
+  "/swjtu/scai/:type": [
+    "AzureG03",
+    "SuperJeason"
+  ],
+  "/swjtu/sports": [
+    "AzureG03"
+  ],
   "/swjtu/xg/:code?": [
     "mobyw"
   ],
@@ -6770,10 +6822,6 @@
   ],
   "/swjtu/jtys/yjs": [
     "qizidog"
-  ],
-  "/swjtu/scai/bks": [
-    "AzureG03",
-    "SuperJeason"
   ],
   "/swpu/bgw/:code": [
     "CYTMWIA"
@@ -6834,6 +6882,9 @@
     "nczitzk"
   ],
   "/szse/rule/:channel{.+}?": [
+    "nczitzk"
+  ],
+  "/szse/disclosure/listed/notice": [
     "nczitzk"
   ],
   "/szu/yz/:type?": [
@@ -7171,6 +7222,9 @@
   ],
   "/topys/:keyword?": [
     "nczitzk"
+  ],
+  "/toranoana/news/:category?": [
+    "Tsuyumi25"
   ],
   "/toutiao/user/token/:token": [
     "TonyRL"
@@ -7537,6 +7591,9 @@
   ],
   "/wabei/hot-recommend": [
     "p3psi-boo"
+  ],
+  "/wainao/topics/:id?": [
+    "nczitzk"
   ],
   "/wainao/wainao-reads": [
     "lucky13820"
@@ -8077,6 +8134,9 @@
   "/youku/channel/:channelId/:embed?": [
     "xyqfer",
     "Fatpandac"
+  ],
+  "/youmemark/:userid": [
+    "pseudoyu"
   ],
   "/youtube/channel/:id/:embed?": [
     "DIYgod"
