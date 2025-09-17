@@ -1,0 +1,48 @@
+# 此工作流专门解决“Vercel 报 pnpm-lock.yaml 与 package.json 不一致”导致的构建失败
+# 适用场景：
+#   1. 你 Fork 项目后直接在 Vercel 一键部署，本地从未安装过 Node / pnpm
+#   2. 原仓库的 lockfile 是用旧版 pnpm 或不同 Node 版本生成的
+# 触发方式：
+#   - 手动：Actions → Fix pnpm lockfile → Run workflow
+#   - 自动：每次 push 到 main 分支也会跑一次（怕手抖可删掉 on.push 部分）
+# 运行结果：
+#   - 机器人会强制用 Node 22 + pnpm 9 重新生成最新 lockfile
+#   - 自动 commit & push 回当前仓库，Vercel 随即重新部署，错误消失
+# 注意事项：
+#   - 若你后续在本地开发，记得先 git pull 把机器人提交拉下来，避免冲突
+#   - 如需固定 pnpm 小版本，把 corepack use pnpm@latest-9 改成 pnpm@9.x.x
+
+name: Fix pnpm lockfile
+
+on:
+  workflow_dispatch: # 允许在 GitHub Actions 页手动点击执行
+  push:
+    branches: [main] # 推送到 main 分支时自动执行（可删除）
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 检出你 Fork 的代码
+      - uses: actions/checkout@v4
+
+      # 2. 安装 Node 22（与 package.json engines 字段匹配）
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # 3. 启用 corepack 并锁定 pnpm 9.x 最新版（与 Vercel 默认版本一致）
+      - run: corepack enable
+      - run: corepack use pnpm@latest-9
+
+      # 4. 删除旧依赖和 lockfile，确保从头开始
+      - run: rm -rf node_modules pnpm-lock.yaml
+
+      # 5. 重新生成干净的 pnpm-lock.yaml
+      - run: pnpm install --no-frozen-lockfile
+
+      # 6. 把新生成的 lockfile 自动提交回仓库
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: regenerate pnpm-lock.yaml with pnpm 9 + node 22"
+          # 默认用 github-actions[bot] 身份提交，无需额外 token
