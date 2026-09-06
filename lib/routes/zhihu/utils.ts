@@ -78,7 +78,8 @@ export const withZhihuClient = async <T>(pageUrl: string, callback: (client: Zhi
     let browserPromise: ReturnType<typeof createBrowserClient> | undefined;
     const startBrowser = async (apiPath?: string) => {
         const { createBrowserClient } = await import('./browser');
-        return createBrowserClient(pageUrl, dc0 ? configured : '', apiPath);
+        // Column APIs can initialize directly; other routes need their page session.
+        return createBrowserClient(pageUrl, dc0 ? configured : '', apiPath?.startsWith('/api/v4/columns/') ? apiPath : undefined);
     };
     const getBrowser = (apiPath?: string) => (browserPromise ??= startBrowser(apiPath));
 

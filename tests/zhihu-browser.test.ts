@@ -30,6 +30,8 @@ vi.mock('../lib/utils/playwright', () => ({ getPlaywrightPage: mocks.getPlaywrig
 const origin = 'https://www.zhihu.com';
 const pageUrl = `${origin}/people/example`;
 const apiPath = '/api/v4/members/example/activities?limit=20';
+const columnPageUrl = 'https://zhuanlan.zhihu.com/example';
+const columnApiPath = '/api/v4/columns/example/items';
 const feedData = { data: [{ id: 'api-item' }] };
 const pageHtml = '<html><body>Profile content</body></html>';
 const nativeFetch = vi.fn<typeof fetch>();
@@ -101,7 +103,7 @@ describe('Zhihu client session', () => {
         expect(mocks.addCookies).not.toHaveBeenCalled();
         expect(mocks.goto.mock.calls).toEqual([
             [`${origin}/explore`, { waitUntil: 'domcontentloaded' }],
-            [`${origin}${apiPath}`, { waitUntil: 'domcontentloaded' }],
+            [pageUrl, { waitUntil: 'domcontentloaded' }],
         ]);
         expect(mocks.browserCookies).toHaveBeenCalledTimes(3);
         expect(mocks.browserCookies).toHaveBeenCalledWith(origin);
@@ -120,7 +122,7 @@ describe('Zhihu client session', () => {
             { name: 'd_c0', value: 'seed==', domain: '.zhihu.com', path: '/' },
             { name: 'z_c0', value: 'login=value', domain: '.zhihu.com', path: '/' },
         ]);
-        expect(mocks.goto).toHaveBeenCalledExactlyOnceWith(`${origin}${apiPath}`, { waitUntil: 'domcontentloaded' });
+        expect(mocks.goto).toHaveBeenCalledExactlyOnceWith(pageUrl, { waitUntil: 'domcontentloaded' });
         expect(mocks.evaluate).toHaveBeenCalledOnce();
         expect(nativeFetch).toHaveBeenCalledExactlyOnceWith(`${origin}${apiPath}`, {
             headers: expect.objectContaining({ 'x-zse-96': expect.stringMatching(/^2\.0_/) }),
@@ -178,20 +180,20 @@ describe('Zhihu client session', () => {
         mocks.browserCookies.mockResolvedValue([{ name: 'd_c0', value: 'browser-dc0' }]);
         mocks.goto.mockImplementation((url) => {
             mocks.url.mockReturnValue(url);
-            return Promise.resolve(url === `${origin}${apiPath}` ? navigationResponse('application/json; charset=utf-8', 403, '{"error":{"code":403}}') : navigationResponse());
+            return Promise.resolve(url === `${origin}${columnApiPath}` ? navigationResponse('application/json; charset=utf-8', 403, '{"error":{"code":403}}') : navigationResponse());
         });
         const { withZhihuClient } = await import('../lib/routes/zhihu/utils');
 
-        expect(await withZhihuClient(pageUrl, (client) => client.get(apiPath))).toEqual(feedData);
+        expect(await withZhihuClient(columnPageUrl, (client) => client.get(columnApiPath))).toEqual(feedData);
 
         expect(mocks.goto.mock.calls).toEqual([
             [`${origin}/explore`, { waitUntil: 'domcontentloaded' }],
-            [`${origin}${apiPath}`, { waitUntil: 'domcontentloaded' }],
+            [`${origin}${columnApiPath}`, { waitUntil: 'domcontentloaded' }],
         ]);
         expect(mocks.waitForFunction).not.toHaveBeenCalled();
         expect(mocks.browserCookies).toHaveBeenCalledTimes(3);
         expect(mocks.evaluate).toHaveBeenCalledOnce();
-        expect(nativeFetch).toHaveBeenCalledExactlyOnceWith(`${origin}${apiPath}`, expect.objectContaining({ credentials: 'include' }));
+        expect(nativeFetch).toHaveBeenCalledExactlyOnceWith(`${origin}${columnApiPath}`, expect.objectContaining({ credentials: 'include' }));
         expect(mocks.ofetch).not.toHaveBeenCalled();
         expect(mocks.destroy).toHaveBeenCalledOnce();
     });
@@ -200,17 +202,17 @@ describe('Zhihu client session', () => {
         mocks.browserCookies.mockResolvedValue([{ name: 'd_c0', value: 'browser-dc0' }]);
         mocks.goto.mockImplementation((url) => {
             mocks.url.mockReturnValue(url);
-            return Promise.resolve(url === `${origin}${apiPath}` ? navigationResponse('application/json', 200, JSON.stringify(feedData)) : navigationResponse());
+            return Promise.resolve(url === `${origin}${columnApiPath}` ? navigationResponse('application/json', 200, JSON.stringify(feedData)) : navigationResponse());
         });
         const refreshedData = { data: [{ id: 'refreshed-item' }] };
         nativeFetch.mockResolvedValue(Response.json(refreshedData));
         const { withZhihuClient } = await import('../lib/routes/zhihu/utils');
 
-        await withZhihuClient(pageUrl, async (client) => {
-            expect(await client.get(apiPath)).toEqual(feedData);
+        await withZhihuClient(columnPageUrl, async (client) => {
+            expect(await client.get(columnApiPath)).toEqual(feedData);
             expect(nativeFetch).not.toHaveBeenCalled();
             expect(mocks.evaluate).not.toHaveBeenCalled();
-            expect(await client.get(apiPath)).toEqual(refreshedData);
+            expect(await client.get(columnApiPath)).toEqual(refreshedData);
         });
 
         expect(mocks.goto).toHaveBeenCalledTimes(2);
@@ -243,6 +245,39 @@ describe('Zhihu client session', () => {
         expect(nativeFetch).toHaveBeenCalledTimes(2);
         expect(nativeFetch).toHaveBeenCalledWith(`${origin}${columnApi}`, expect.objectContaining({ credentials: 'include' }));
         expect(mocks.ofetch).not.toHaveBeenCalled();
+        expect(mocks.destroy).toHaveBeenCalledOnce();
+    });
+
+    it('initializes a c_-style column through its API even when the page already uses the API origin', async () => {
+        const columnUrl = `${origin}/column/c_123`;
+        const columnApi = '/api/v4/columns/c_123/items';
+        const { withZhihuClient } = await import('../lib/routes/zhihu/utils');
+
+        expect(await withZhihuClient(columnUrl, (client) => client.get(columnApi))).toEqual(feedData);
+
+        expect(mocks.goto.mock.calls).toEqual([
+            [`${origin}/explore`, { waitUntil: 'domcontentloaded' }],
+            [`${origin}${columnApi}`, { waitUntil: 'domcontentloaded' }],
+        ]);
+        expect(mocks.getPlaywrightPage).toHaveBeenCalledExactlyOnceWith(columnUrl, { noGoto: true, closeTimeout: 0 });
+        expect(nativeFetch).toHaveBeenCalledExactlyOnceWith(`${origin}${columnApi}`, expect.objectContaining({ credentials: 'include' }));
+        expect(mocks.destroy).toHaveBeenCalledOnce();
+    });
+
+    it.each([
+        [`${origin}/people/example`, '/api/v3/moments/example/activities?limit=5'],
+        [`${origin}/topic/123/newest`, '/api/v5.1/topics/123/feeds/timeline_activity'],
+        [`${origin}/question/123`, '/api/v4/questions/123/answers?limit=20'],
+    ])('initializes the human page for a non-column API: %s', async (targetUrl, targetApi) => {
+        const { withZhihuClient } = await import('../lib/routes/zhihu/utils');
+
+        expect(await withZhihuClient(targetUrl, (client) => client.get(targetApi))).toEqual(feedData);
+
+        expect(mocks.goto.mock.calls).toEqual([
+            [`${origin}/explore`, { waitUntil: 'domcontentloaded' }],
+            [targetUrl, { waitUntil: 'domcontentloaded' }],
+        ]);
+        expect(nativeFetch).toHaveBeenCalledExactlyOnceWith(`${origin}${targetApi}`, expect.objectContaining({ credentials: 'include' }));
         expect(mocks.destroy).toHaveBeenCalledOnce();
     });
 
